@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ex9 Tic Tac Toe</title>
+<style>
+  td {
+    border: 1px solid black;
+    width:100px;
+    height:100px;
+    z-index:0;
+  }
+  td img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+        z-index:10;
+}
+  tr { 
+    width: 300px;
+    height: 100px;
+    border: 1px solid black; 
+  }
+ 
+  table{
+    width: 300px;
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  /* Hide board adn h2 before start is cliced */
+  #board {
+    visibility: hidden;
+  }
+
+  #currentPlayerMove {
+    visibility: hidden;
+  }
+
+  /* Center X,O */
+  #board td {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+
+</style> 
+</head>
+<body style="background-color:blanchedalmond">
+<!-- Insert the basic DOM Elements, that you want to use, h2-Header, table...-->
+<h1>Tic Tac Toe</h1>
+<!-- Create Start button which draws the table after it is clicked, also functions as a reset button-->
+<button id="startButton">Start</button>
+<!--  Draw 3x3 table  -->
+<table id="board">
+  <tr>
+    <td id="cell0"></td>
+    <td id="cell1"></td>
+    <td id="cell2"></td>
+  </tr>
+  <tr>
+    <td id="cell3"></td>
+    <td id="cell4"></td>
+    <td id="cell5"></td>
+  </tr>
+  <tr>
+    <td id="cell6"></td>
+    <td id="cell7"></td>
+    <td id="cell8"></td>
+  </tr>
+</table>
+<!-- h2 display current player move -->
+<h2 id="currentPlayerMove">Test</h2>
+
+<!-- Write JavaScript Code to manipulate the DOM-->
+<script>
+// Define Script Vars and query selector for the table
+// Select all cells from the 3x3 table, each td will be filled with X or O on click later
+let cells = document.querySelectorAll("#board td");
+// Players
+let player = ["X", "O"];
+// Var to track which player has to take next move -> 0 = X, 1 = O
+let nextPlayerMove;
+
+// Define cells to win 
+let winningCombinations = [
+  // Horizontal
+  ['cell0', 'cell1', 'cell2'],
+  ['cell3', 'cell4', 'cell5'],
+  ['cell6', 'cell7', 'cell8'],
+  // Vertical
+  ['cell0', 'cell3', 'cell6'],
+  ['cell1', 'cell4', 'cell7'],
+  ['cell2', 'cell5', 'cell8'],
+  // Cross axis 
+  ['cell0', 'cell4', 'cell8'],
+  ['cell2', 'cell4', 'cell6']
+];
+
+// Check which player has to take the next move and display the status text in h2
+function checkNextPlayerMove() {
+  if (nextPlayerMove == 0) {
+      document.querySelector("#currentPlayerMove").textContent = "X - Turn";
+  } else {
+      document.querySelector("#currentPlayerMove").textContent = "O - Turn";
+  }
+  // Check if won everytime next playermove is updated 
+  checkIfWon();
+}
+// Check if a player has won
+function checkIfWon() {
+  // Check each winning combination -> get the board state each time a player made a move
+  
+  // If no winning combination is found, update h2 to -> DRAW
+  // else
+  document.querySelector("#currentPlayerMove").textContent = "DRAW";
+}
+
+// On Start Button click -> Draw the table or reset the table. Make the table visible 
+document.querySelector("#startButton").addEventListener("click", function() {
+  // Set Button text from start to reset after first init of the board
+  document.querySelector("#startButton").textContent = "Reset";
+  // Clear all the cells
+  cells.forEach(function(cell) {
+      cell.textContent = "";
+  });
+  // Make the table visible
+  document.querySelector("#board").style.visibility = "visible";
+  // Make h2 visible to display next player turn
+  document.querySelector("#currentPlayerMove").style.visibility = "visible";
+  // Set the next player move to 0 -> X
+  nextPlayerMove = 0;
+  // Update the h2 text with the function
+  checkNextPlayerMove();
+});
+
+
+// Click event listener with onclick=myFunction(event)
+cells.forEach(function(cell) {
+    cell.addEventListener("click", function(event) {
+        // Check if cell is empty
+        if (event.target.textContent == "") {
+            event.target.textContent = player[nextPlayerMove];
+            // Check if the next player move is 0 -> X
+            if (nextPlayerMove == 0) {
+                // If 0 -> set next player move to 1 -> O
+                nextPlayerMove = 1;
+            } else {
+                // If 1 -> set next player move to 0 -> X
+                nextPlayerMove = 0;
+            }
+            // Update the h2 text 
+            checkNextPlayerMove();
+        }
+    });
+});
+
+// 
+
+
+
+</script>
+</body>
+</html>
